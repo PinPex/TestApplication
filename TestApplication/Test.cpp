@@ -85,21 +85,32 @@ void TestInternalCombustion::secondTestStand(EngineInternalCombustion* engine) {
 void TestInternalCombustion::Start(){
     /* Parsing file for numbers */
     ParsingParameters("Input.txt");
-    
+    if (parameters.size() < 7) {
+        std::cout << "Error: a few parameters" << std::endl;
+        exit(-1);
+    }
     /* Calculating torque and velocity vectors */
     std::vector<double> M = getArrayParameter(1, (parameters.size() - 4) / 2 + 1);
     std::vector<double> V = getArrayParameter((parameters.size() - 4) / 2 + 1, (parameters.size() - 4));
 
-    
+    if (M.size() != V.size()) {
+        std::cout << "Error: invalid graphic" << std::endl;
+        exit(-1);
+    }
+
 
     /* Retrieving environment temperature from user */
-    double Tenvironment;
-    std::cin >> Tenvironment;
+    std::cout << "Please, type environment temperature" << std::endl;
+    std::string Tenvironment;
+    std::getline(std::cin, Tenvironment);
+    while (Tenvironment.find_first_of("0123456789.") == std::string::npos) {
+        std::cout << "Error: this is not number" << std::endl;
+        std::getline(std::cin, Tenvironment);
+    }
     std::cout << std::endl;
-
     /* Make engine object */
     engine = new EngineInternalCombustion(parameters[0], M, V, parameters[parameters.size() - 4],
-        parameters[parameters.size() - 3], parameters[parameters.size() - 2], parameters[parameters.size() - 1], Tenvironment);
+        parameters[parameters.size() - 3], parameters[parameters.size() - 2], parameters[parameters.size() - 1], stoi(Tenvironment));
 
     /* Printing parameters */
     printParameters();
