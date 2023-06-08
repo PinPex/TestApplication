@@ -29,7 +29,28 @@ std::vector<double> Test::getArrayParameter(int first_position, int second_posit
     return std::vector<double>(parameters.begin() + first_position, parameters.begin() + second_position);
 }
 
+void TestInternalCombustion::printParameters() {
+    std::cout << "With Inertion = " << parameters[0] << ",\n";
+    std::cout << "M = { ";
+    for (auto i : engine->M_values) {
+        std::cout << i << ", ";
+    }
+    std::cout << "}\n";
+    std::cout << "N = { ";
+    for (auto i : engine->V_values) {
+        std::cout << i << ", ";
+    }
+    std::cout << "}\n";
+    std::cout << "Overheat temperature = " << engine->Tover << "\n";
+    std::cout << "Heating torque coefficient = " << engine->Hm << "\n";
+    std::cout << "Heating velocity coefficient = " << engine->Hv << "\n";
+    std::cout << "Cooling coefficient = " << engine->C << "\n";
+    std::cout << "Environment temperature = " << engine->Tenvironment << std::endl << std::endl;
+}
+
+
 void TestInternalCombustion::firstTestStand(EngineInternalCombustion* engine) {
+    std::cout << "First test stand (overheating time)" << std::endl;
     double time = 0.0;
     double delta_time = 0.01;
 
@@ -41,7 +62,9 @@ void TestInternalCombustion::firstTestStand(EngineInternalCombustion* engine) {
     engine->resetEngine();
 }
 
+
 void TestInternalCombustion::secondTestStand(EngineInternalCombustion* engine) {
+    std::cout << "Second test stand (maximum power)" << std::endl;
     const double EPSILON = 1e-5; // Margin of error
     double time = 0.0;
     double delta_time = 0.01;
@@ -62,18 +85,24 @@ void TestInternalCombustion::secondTestStand(EngineInternalCombustion* engine) {
 void TestInternalCombustion::Start(){
     /* Parsing file for numbers */
     ParsingParameters("Input.txt");
-
+    
     /* Calculating torque and velocity vectors */
     std::vector<double> M = getArrayParameter(1, (parameters.size() - 4) / 2 + 1);
     std::vector<double> V = getArrayParameter((parameters.size() - 4) / 2 + 1, (parameters.size() - 4));
 
+    
+
     /* Retrieving environment temperature from user */
     double Tenvironment;
     std::cin >> Tenvironment;
+    std::cout << std::endl;
+
     /* Make engine object */
-    EngineInternalCombustion* engine = new EngineInternalCombustion(parameters[0], M, V, parameters[parameters.size() - 4],
+    engine = new EngineInternalCombustion(parameters[0], M, V, parameters[parameters.size() - 4],
         parameters[parameters.size() - 3], parameters[parameters.size() - 2], parameters[parameters.size() - 1], Tenvironment);
 
+    /* Printing parameters */
+    printParameters();
     /* Make tests */
     firstTestStand(engine);
     secondTestStand(engine);
