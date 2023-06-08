@@ -58,7 +58,7 @@ void TestInternalCombustion::firstTestStand(EngineInternalCombustion* engine) {
         engine->engineIteration(time, delta_time);
     }
 
-    std::cout << "Overheating time: " << time << std::endl;
+    std::cout << "Overheating time: " << time << std::endl << std::endl;
     engine->resetEngine();
 }
 
@@ -78,7 +78,7 @@ void TestInternalCombustion::secondTestStand(EngineInternalCombustion* engine) {
             Vmax = engine->V;
         }
     }
-    std::cout << "With velocity " << Vmax << " maximum power: " << Nmax << std::endl;
+    std::cout << "With velocity " << Vmax << " maximum power: " << Nmax << std::endl << std::endl;
     engine->resetEngine();
 }
 
